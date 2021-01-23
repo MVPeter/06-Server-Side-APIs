@@ -1,0 +1,28 @@
+.fiveDayCard {
+    
+}
+
+.hide {
+    display: none;
+}
+
+.ModLow {
+    background-color: green;
+    color: white;
+}
+
+.HighVH {
+    background-color: yellow;
+    color: black;
+
+}
+
+.extreme {
+    background-color: red;
+    color: white;
+
+}
+
+.card-text {
+    white-space: nowrap;
+}

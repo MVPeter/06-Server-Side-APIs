@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Weather Info Search</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="./assets/style.css" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container-fluid p-0 mr-3 ml-3">
+        <div class="row w-100 m-0">
+            <div class="col-md-12 p-0">
+                <h1 class="bg-dark text-light text-center pt-3 pb-3">Weather Dashboard</h1>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid p-0 mr-3 ml-3 border-bottom border-dark">
+        <div class="row m-0">
+            <div style="min-height: 392px;" class="container-md float-left ml-0 h-100 border w-20 border-light bg-secondary">
+                <div class="col-xl-12 mt-2 mb-4">
+                    <div class="font-weight-bold mt-2 mb-2">Search for a City:</div>
+                    <div class="input-group mb-3">
+                        <input id="citySearched" type="text" class="form-control" placeholder="City" value="">
+                        <div class="input-group-append">
+                            <button id="searchButton" class="btn btn-outline-secondary bg-info text-white" type="button">Button</button>
+                        </div>
+                    </div>
+                    <div id="newCityButtons" class="mb-4">
+                        <!-- <button id="button1" type="button" class="btn btn-light btn-lg btn-block">Salt Lake</button>
+                        <button id="button2" type="button" class="btn btn-light btn-lg btn-block">Portland</button>
+                        <button id="button3" type="button" class="btn btn-light btn-lg btn-block">Denver</button>
+                        <button id="button4" type="button" class="btn btn-light btn-lg btn-block">Seattle</button>
+                        <button id="button5" type="button" class="btn btn-light btn-lg btn-block">Bolder</button> -->
+                        
+                    </div>
+
+
+                </div>
+
+
+            </div>
+            <div id="weatherpage" class="container-fluid ml-3 p-0 float-left w-auto border border-light">
+                <div class="row pl-4 pt-2 mb-3 w-100">
+                    <div class="col-md-12 border border-light h-75">
+                        <div id="currentCitySearch"></div>
+                        <div id="currentCity" class="font-weight-bold"></div>
+                        <img id="Icon5" src="">
+                        <div class="font-weight-light">Temperature: <span id="currentTemp"></span> </div>
+                        <div class="font-weight-light">Humidity: <span id="currentHumidity"></span> </div>
+                        <div class="font-weight-light">Wind Speed: <span id="currentWindSpeed"></span> </div>
+                        <div class="font-weight-light">UV Index: <span id="currentUVIndex"
+                                class="pl-1 pr-1"></span> </div>
+
+                    </div>
+                </div>
+                <div class="row m-0">
+                    <div class="col-xs-12">
+                        <div>
+                            <h5 class="font-weight-bold ml-4">5-Day Forcast:</h5>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="row m-0">
+
+                    <div class="card-group">
+
+                        <div class="card m-3 bg-primary text-white">
+                            <div class="card-title pl-1 font-weight-bold" id="DateP0">Date</div>
+                            <img id="Icon0" src="" alt="weather icon">
+                            <div class="card-body pl-1 font-weight-light">
+                                <p class="card-text" id="temp0"></p>
+                                <p class="card-text" id="humidity0">Humidity</p>
+                            </div>
+                        </div>
+                        <div class="card m-3 bg-primary text-white">
+                            <div class="card-title pl-1 font-weight-bold" id="DateP1">Date</div>
+                            <img id="Icon1" src="" alt="weather icon">
+                            <div class="card-body pl-1 font-weight-light">
+                                <p class="card-text" id="temp1"></p>
+                                <p class="card-text" id="humidity1">Humidity</p>
+                            </div>
+                        </div>
+                        <div class="card m-3 bg-primary text-white">
+                            <div class="card-title pl-1 font-weight-bold" id="DateP2">Date</div>
+                            <img id="Icon2" src="" alt="weather icon">
+                            <div class="card-body pl-1 font-weight-light">
+                                <p class="card-text" id="temp2"></p>
+                                <p class="card-text" id="humidity2">Humidity</p>
+                            </div>
+                        </div>
+                        <div class="card m-3 bg-primary text-white">
+                            <div class="card-title pl-1 font-weight-bold" id="DateP3">Date</div>
+                            <img id="Icon3" src="" alt="weather icon">
+                            <div class="card-body pl-1 font-weight-light">
+                                <p class="card-text" id="temp3"></p>
+                                <p class="card-text" id="humidity3">Humidity</p>
+                            </div>
+                        </div>
+                        <div class="card m-3 bg-primary text-white">
+                            <div class="card-title pl-1 font-weight-bold" id="DateP4">Date</div>
+                            <img id="Icon4" src="" alt="weather icon">
+                            <div class="card-body pl-1 font-weight-light">
+                                <p class="card-text" id="temp4"></p>
+                                <p class="card-text" id="humidity4">Humidity</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        </nav>
+
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+        <script src="./assets/scripts.js"></script>
+</body>
+
+</html>
