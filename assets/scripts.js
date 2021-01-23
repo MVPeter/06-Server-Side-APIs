@@ -59,7 +59,7 @@ function buildQueryURLUV(lat, lon) {
     var u = "lat=" + lat + "&lon=" + lon;
 
     // queryURL query the API
-    UVqueryURL = "http://api.openweathermap.org/data/2.5/onecall?" + u + "&appid=" + queryParams;
+    UVqueryURL = "https://api.openweathermap.org/data/2.5/onecall?" + u + "&appid=" + queryParams;
 
     // UVURLquery()
     return UVqueryURL
@@ -72,7 +72,7 @@ function buildQueryURLCurrent() {
     // Grab text the user typed into the search input, add to the queryParams object
     var c = $("#citySearched").val()
     // queryURL query the API
-    forcastURL = "http://api.openweathermap.org/data/2.5/forecast?q=" + c + "&appid=" + queryParams;
+    forcastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + c + "&appid=" + queryParams;
 
     // Logging the URL so we have access to it for troubleshooting
     console.log("---------------\nCURL: " + forcastURL + "\n---------------");
@@ -291,7 +291,7 @@ function updatebody(city) {
 }
 //Function to update the weather Icon based on the code given
 function updateWatherIcon(iconNum, iconCode) {
-    var iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+    var iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
     $(iconNum).attr("src", iconURL)
 }
 
