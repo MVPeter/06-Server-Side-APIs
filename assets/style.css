@@ -1,9 +1,9 @@
-.fiveDayCard {
-    
-}
-
 .hide {
     display: none;
+}
+
+#currentCity {
+    font-size: 30px;
 }
 
 .ModLow {

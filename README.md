@@ -10,7 +10,7 @@ Deployed Link:  https://mvpeter.github.io/06-Server-Side-APIs/.
 
 The site will:
 
-- Seach by city and show the current weather and 5 day forcast
+- Search by city and show the current weather and 5 day forcast
     - Present the current date and Future dats.
     - Icon representing the current and future weather.
     - Display the current and future temperatures.
@@ -18,5 +18,5 @@ The site will:
     - Display the current and future wind speeds.
     - Display the current and future UV index
     - Color code the UV index for Low, Moderate, and Extreme.
-- Save the last seach as a clickable button.
+- Save the last search as a clickable button.
 - Refresh will return saved searches.
