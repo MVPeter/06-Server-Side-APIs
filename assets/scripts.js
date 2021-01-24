@@ -13,6 +13,7 @@ var UVqueryURL = "";
 var UVIndex = 0;
 var lat = 0;
 var lon = 0;
+var saveCityArray = [];
 var lsClean = [];
 
 
@@ -21,35 +22,20 @@ var lsClean = [];
 $(document).ready(function () {
     $("#weatherpage").addClass("hide")
 
-    for (let i = 0; i < localStorage.length; i++) {
-        lsClean.unshift(localStorage.key(i));
-    }
-    if (localStorage.length > 8) {
-        for (let i = 0; i < lsClean.length; i++) {
-            localStorageButtons(lsClean[i])
+    if (localStorage.length > 0) {
+        for (let i = 0; i < localStorage.length; i++) {
+            lsClean.unshift(localStorage.key(i));
+            arraybuttons = JSON.parse(localStorage.getItem(lsClean[i]));
+            forcastURL = arraybuttons[0];
+            UVqueryURL = arraybuttons[1];
         }
+    }
 
-        localStorage.clear()
-        location.reload();
-    } else {
-        for (let i = 0; i < lsClean.length; i++) {
-            createButtons(lsClean[i]);
-        }
+    for (let i = 0; i < lsClean.length; i++) {
+        createButtons(lsClean[i]);
     }
+
 });
-
-
-//Funciton to update webpage cards to the first item in the array
-function updateHistoryArray(id, cityObject, newValue) {
-    for (let id = 0; id < buttons.length; id++) {
-        var array = buttons[id].id.city;
-        array.cityObject = newValue;
-        return;
-    };
-
-
-};
-
 
 function buildQueryURLUV(lat, lon) {
     // Set the API key
@@ -75,65 +61,65 @@ function buildQueryURLCurrent() {
     forcastURL = "https://api.openweathermap.org/data/2.5/forecast?q=" + c + "&appid=" + queryParams;
 
     // Logging the URL so we have access to it for troubleshooting
-    console.log("---------------\nCURL: " + forcastURL + "\n---------------");
+    // console.log("---------------\nCURL: " + forcastURL + "\n---------------");
 
     return forcastURL;
 };
 
+//writes saved City, and search URLS to Local storage.
 function localStorageButtons(city) {
 
     savedCity = city.toLowerCase().replace(/\b[a-z]/g, function (letter) {
         return letter.toUpperCase();
     });
-
     var saveLocalStorage = JSON.stringify([forcastURL, UVqueryURL]);
-    // saveLocalStorage = lsClean[0]
+    saveCityArray.push({
+        "city": savedCity,
+        "fURL": forcastURL,
+        "UV": UVqueryURL
+    });
 
     localStorage.setItem(savedCity, saveLocalStorage);
 
+    if (localStorage.length > 7) {
+
+        localStorage.clear()
+        for (let i = 0; i < saveCityArray.length; i++) {
+            var URLStorage = JSON.stringify([saveCityArray[i].fURL, saveCityArray[i].UV]);
+            localStorage.setItem(saveCityArray[i].city, URLStorage);
+
+        }
+        
+    }
 }
 
+//on click event for the Search button
 $("#searchButton").on("click", function (event) {
     event.preventDefault();
     $("#weatherpage").removeClass("hide");
     //collect City name from Input
     city = $("#citySearched").val();
-    //build array of cities
-    // lsClean.push(city, forcastURL, UVqueryURL);
-    // //manage array of cities, and rebuild local storage
-    // if (localStorage.length > 5) {
-    //     lsClean.pop()
-    //     for (let i = 0; i < lsClean.length; i++) {
-    //         localStorageButtons(lsClean[i]);
-    //         for (let i = 0; i < localStorage.length; i++) {
-    //             localStorage.setItem(lsCLean[i], );
 
-    //         }
-    //         localStorage.clear();
-    //         for (let i = 0; i < lsClean.length; i++) {
-    //             localStorageButtons(lsClean[i]);
-    //         }
-    //     }
-    //     location.reload();
-    // }
-
-    //UNhide the main body
     //build URL's for the City chosen
     forcastURL = buildQueryURLCurrent();
-    // FqueryURL = buildQueryURLFuture();
 
+    //Run CrrentURLquery function
     currentURLquery()
+
+    //Make sure the city searched is formatted with a capicatl letter
     savedCity = city.toLowerCase().replace(/\b[a-z]/g, function (letter) {
         return letter.toUpperCase();
     });
 
 
     savedBArray.unshift(savedCity);
+    //create a saved button of the current search
     createButtons(savedCity)
 
 
 });
 
+//on click even tfor any saved city searched button.
 $("#newCityButtons").on("click", ".cityButton", function (id) {
     console.log("City Button Clicked");
     $("#weatherpage").removeClass("hide");
@@ -143,15 +129,6 @@ $("#newCityButtons").on("click", ".cityButton", function (id) {
     returnSaveSearchButtons(savedButtonCity);
 });
 
-// $(".cityButton").on("click", function(event) {
-//     event.preventDefault();
-//     console.log("City Button Clicked");
-//     var savedButtonCity = $(this).attr("id");
-//     console.log(savedButttonCity);
-//     returnSaveSearchButtons(savedButtonCity);
-
-// });
-
 // Make the AJAX request to the API - GETs the JSON data at the queryURL.
 // The data then gets pushed to an array.
 function currentURLquery() {
@@ -159,7 +136,6 @@ function currentURLquery() {
         url: forcastURL,
         method: "GET"
     }).then(function (cresponse) {
-        // console.log(`I AM RIGHT HERE ${CqueryURL}`)
         console.log(cresponse);
 
         city = $("#citySearched").val();
@@ -169,19 +145,20 @@ function currentURLquery() {
         localStorageButtons(savedCity);
         UVqueryURL = buildQueryURLUV(cresponse.city.coord.lat, cresponse.city.coord.lon)
         console.log("---------------\nuvURL: " + UVqueryURL + "\n---------------");
-        //clear arrays
+        //clear information array
         currentWeather.splice(0, currentWeather.length);
 
-        // //push API info into currentWeather array
-        // currentWeather.push(savedCity);
+        // push API info into currentWeather array
+        // save Lat and lon number for the to get UV informaiton
         currentWeather.push({ "latitued": cresponse.city.coord.lat });
         currentWeather.push({ "Longitude": cresponse.city.coord.lon });
         //push API info into currentWeather array
         currentWeather.push(savedCity);
+        //format date
         pulledTime = cresponse.list[0].dt
         var d = new Date(pulledTime * 1000);
         var dt = d.toLocaleDateString();
-        console.log("DATE IS:      " + dt)
+        // push weather detals into temp array.
         currentWeather.push(
             {
                 "dt": dt,
@@ -198,11 +175,11 @@ function currentURLquery() {
 
             })
 
-        //gather 5 days of weather form API.
+        //gather 5 days of weather form API omtp array.
         fiveDayWeather.splice(0, fiveDayWeather.length);
-        for (let i = 1; i < cresponse.list.length; i += 8) {
+        for (let i = 7; i < cresponse.list.length; i += 8) {
 
-
+            //format date
             pulled5Time = cresponse.list[i].dt
             var d = new Date(pulled5Time * 1000);
             var dt = d.toLocaleDateString();
@@ -211,7 +188,7 @@ function currentURLquery() {
             var temp = cresponse.list[i].main.temp;
             var humidity = cresponse.list[i].main.humidity;
 
-
+            //push 5  day weather information into array.
             fiveDayWeather.push(
                 {
                     "dt": dt,
@@ -219,7 +196,6 @@ function currentURLquery() {
                     "temp": temp,
                     "humidity": humidity,
                 });
-
         }
         UVURLquery()
 
@@ -234,11 +210,8 @@ function UVURLquery() {
         console.log(uvresponse);
         UVIndex = uvresponse.current.uvi;
         currentWeather.push({ "UVIndex": UVIndex, })
-        // pulledTime = uvresponse.current.dt
-        // var d = new Date(pulledTime * 1000);
-        // var dt = d.toLocaleDateString();
-        // console.log("DATE IS:      " + dt)
 
+        //change background colors for Moderate, High, and extreme UV index.
         if (UVIndex <= 2) {
             $("#currentUVIndex").attr("class", "ModLow")
         } else if (UVIndex <= 7) {
@@ -246,14 +219,11 @@ function UVURLquery() {
         } else {
             $("#currentUVIndex").attr("class", "extreme")
         }
-
-
-
-
         updatebody(savedCity)
     });
 }
-//fucntion to update the main body TOP
+
+//fucntion to update the main body
 function updatebody(city) {
     var currdate = new Date();
     var currdate = (currdate.getMonth() + 1) + '/' + currdate.getDate() + '/' + currdate.getFullYear();
@@ -263,6 +233,7 @@ function updatebody(city) {
     $("#currentHumidity").html(currentWeather[3].humidity);
     $("#currentWindSpeed").html(currentWeather[3].windSpeed);
     $("#currentUVIndex").html(currentWeather[5].UVIndex);
+    //update 5 day cards.
     for (let i = 0; i < fiveDayWeather.length; i++) {
         var cardNum = "#Icon" + i;
         var iconCode = fiveDayWeather[i].icon;
@@ -283,13 +254,9 @@ function updatebody(city) {
         var chumidity = "Humidity: " + fiveDayWeather[i].humidity;
         updateCarddate(cardNum, chumidity);
     }
-//     for (let i = 1; i < fiveDayWeather.length; i++) {
-//         var cardNum = "#Icon" + i;
-//         var cardDate = fiveDayWeather[i].dt;
-//         updateCardBody(cardNum, Item)
-//     }
 }
-//Function to update the weather Icon based on the code given
+
+//Functions to update the weather Icon based on the code given
 function updateWatherIcon(iconNum, iconCode) {
     var iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
     $(iconNum).attr("src", iconURL)
@@ -307,7 +274,14 @@ function updateCarddate(item, chumidity,) {
     $(item).html(chumidity);
 }
 
-
+//used to create the HTML buttons for saved searches
+function createButtons(city) {
+    var storedButtons = $("<button>");
+    storedButtons.addClass("cityButton btn btn-light btn-lg btn-block");
+    storedButtons.attr("ID", city);
+    storedButtons.text(city)
+    $("#newCityButtons").prepend(storedButtons);
+}
 
 //function to build the saved seaches to buttons from localstorage
 function returnSaveSearchButtons(city) {
@@ -319,45 +293,4 @@ function returnSaveSearchButtons(city) {
     forcastURL = arraybuttons[0];
     UVqueryURL = arraybuttons[1];
     currentURLquery()
-
 }
-//used to create the HTML buttons for saved searches
-function createButtons(city) {
-    var storedButtons = $("<button>");
-    storedButtons.addClass("cityButton btn btn-light btn-lg btn-block");
-    storedButtons.attr("ID", city);
-    storedButtons.text(city)
-    $("#newCityButtons").prepend(storedButtons);
-
-
-}
-
-
-// function savedButtons(cityname) {
-//     console.log(cityname);
-//     savedURLs = JSON.stringify(localStorage.getItem(savedCity));
-//     savedCurrentURL = savedURLs[0];
-//     savedfutureURL = savedURLs[1];
-//     SavedUVIndesURL = savedURLs[2];
-// }
-
-
-
-
-// if (localStorage.getItem(4)) {
-//     localStorageButtons(1);
-// } else if (localStorage.getItem(3)) {
-//     localStorageButtons(4);
-// } else if (localStorage.getItem(2)) {
-//     localStorageButtons(3);
-// } else (localStorageButtons(4));
-
-
-
-
-// .then(updatePage);
-
-
-// function insertobjectCW(arr, obj) {
-//     arr.push(obj);
-// }
