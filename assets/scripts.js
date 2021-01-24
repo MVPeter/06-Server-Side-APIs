@@ -1,27 +1,27 @@
 
+//Weather arrays
 var currentWeather = [];
-// var futureWeather = [];
 var fiveDayWeather = [];
-var test5 = [];
+//Buttons arrays
 var savedBArray = [];
 var arraybuttons = "";
-// Build the query URL for the ajax request to the NYT API
-var savedCity = "";
-var forcastURL = "";
-// var FqueryURL = buildQueryURLFuture();
-var UVqueryURL = "";
-var UVIndex = 0;
-var lat = 0;
-var lon = 0;
 var saveCityArray = [];
 var lsClean = [];
-
+//City searched
+var savedCity = "";
+//URLs for api
+var forcastURL = "";
+var UVqueryURL = "";
+var UVIndex = 0;
+//Latitude Longitude
+var lat = 0;
+var lon = 0;
 
 
 //current Date on page load
 $(document).ready(function () {
     $("#weatherpage").addClass("hide")
-
+//detect Localstorage and collect items if needed.
     if (localStorage.length > 0) {
         for (let i = 0; i < localStorage.length; i++) {
             lsClean.unshift(localStorage.key(i));
@@ -121,11 +121,9 @@ $("#searchButton").on("click", function (event) {
 
 //on click even tfor any saved city searched button.
 $("#newCityButtons").on("click", ".cityButton", function (id) {
-    console.log("City Button Clicked");
     $("#weatherpage").removeClass("hide");
     var savedButtonCity = id.target.id;
     $("#citySearched").val(savedButtonCity);
-    console.log(savedButtonCity);
     returnSaveSearchButtons(savedButtonCity);
 });
 
@@ -136,7 +134,7 @@ function currentURLquery() {
         url: forcastURL,
         method: "GET"
     }).then(function (cresponse) {
-        console.log(cresponse);
+        // console.log(cresponse);
 
         city = $("#citySearched").val();
         savedCity = city.toLowerCase().replace(/\b[a-z]/g, function (letter) {
@@ -144,7 +142,7 @@ function currentURLquery() {
         });
         localStorageButtons(savedCity);
         UVqueryURL = buildQueryURLUV(cresponse.city.coord.lat, cresponse.city.coord.lon)
-        console.log("---------------\nuvURL: " + UVqueryURL + "\n---------------");
+        // console.log("---------------\nuvURL: " + UVqueryURL + "\n---------------");
         //clear information array
         currentWeather.splice(0, currentWeather.length);
 
@@ -207,7 +205,7 @@ function UVURLquery() {
         url: UVqueryURL,
         method: "GET"
     }).then(function (uvresponse) {
-        console.log(uvresponse);
+        // console.log(uvresponse);
         UVIndex = uvresponse.current.uvi;
         currentWeather.push({ "UVIndex": UVIndex, })
 
