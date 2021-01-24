@@ -26,3 +26,8 @@
 .card-text {
     white-space: nowrap;
 }
+
+img {
+    max-width:60px;
+    height:auto;
+}
